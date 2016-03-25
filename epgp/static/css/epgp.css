@@ -1,0 +1,125 @@
+div.body {
+    padding-top: 70px;
+}
+
+div.gear-slot {
+    height: 128px;
+    background-color: #1E2B5A;
+}
+
+div.raider-logs {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+td.epgp_bold {
+    font-size: 14pt;
+    padding: 16px;
+}
+
+td.epgp_med {
+    font-size: 18pt;
+    padding: 14px;
+}
+
+input#form-filter {
+    width: 100%;
+    height: 100%;
+}
+
+th.header-raider {
+    width: 60%;
+}
+
+div.raider-name {
+    background-color: #222222;
+}
+
+h1.raider-name {
+    color: #F5F5F5;
+}
+
+div.rules {
+    height: 100%;
+}
+
+th.headerSortDown::after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\e155";
+}
+
+th.headerSortUp::after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\e156";
+}
+
+th.epgp_med:not(.headerSortDown):not(.headerSortUp)::after {
+    position: relative;
+    top: 1px;
+    display: inline-block;
+    font-family: 'Glyphicons Halflings';
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    content: "\e150";
+
+}
+
+th.headerSortUp, th.headerSortDown {
+    background-color: #B5B5B5;
+}
+
+tr.ep-row {
+    background-color: #CBF3FF;
+}
+
+tr.gp-row {
+    background-color: #B9FFA7;
+}
+
+tr.decay-row {
+    background-color: #CCC5FF;
+}
+
+table.nav-table {
+    background-color: #D2D2D2;
+}
+
+.btn-wide {
+    width: 100%
+}
+
+.btn-active {
+    background-color: #E6E6E6;
+}
+
+.class-sep {
+    border: 0;
+    height: 1px;
+    background-image: linear-gradient(
+            to right,
+            rgba(0, 0, 0, 0),
+            rgba(255, 255, 255, 0.50),
+            rgba(0, 0, 0, 0)
+    );
+    margin-bottom: 5px;
+}
+

@@ -1,0 +1,76 @@
+{% extends "base.tpl" -%}
+{% block sidebar -%}
+    <div class="sidebar col-lg-2">
+        <div class="well">
+            <ul class="nav nav-pills nav-stacked text-center">
+                <li><input type="text" id="form-filter" placeholder="Search Table" class="form-control"/></li>
+                <li><a href="/rules" class="list-group-item">Rules</a></li>
+                <li><a href="/loot" class="list-group-item">Loot Logs</a></li>
+                <li><a href="https://goo.gl/WHT0Xz" class="list-group-item">Bench List</a></li>
+                <li><a href="http://www.raidschedule.com/" class="list-group-item">Raid Schedule</a></li>
+            </ul>
+        </div>
+        <div class="well">
+            <p class="alert alert-warning">
+                If your name is highlighted you do not meet the
+                minimum EP requirement of 1500 to roll on loot.
+            </p>
+        </div>
+        <div class="well">
+            <p class="alert alert-success text-center">
+                Last update: {{ guild.last_update }}
+            </p>
+        </div>
+    </div>
+{% endblock %}
+{% block content -%}
+    <div class="content col-lg-10">
+        <table id="guild-table" class="table table-hover table-bordered table-responsive">
+            <thead>
+            <tr>
+                <th class="epgp_med header-class hidden-xs hidden-sm">Class</th>
+                <th class="epgp_med header-role hidden-xs hidden-sm">Role</th>
+                <th class="epgp_med header-raider">Raider</th>
+                <th class="epgp_med header-ep">EP</th>
+                <th class="epgp_med header-gp">GP</th>
+                <th class="epgp_med header-pr headerSortUp">PR <span></span></th>
+            </tr>
+            </thead>
+            <tbody id="guild-body">
+            {% for player in guild.by_pr | reverse -%}
+                {% if player.ep < 1500 %}
+                    <tr class="ep-below alert alert-warning">
+                        {% else %}
+                    <tr>
+                {% endif %}
+            <td class="hidden-xs hidden-sm">{{ player.class_name }}</td>
+            <td class="hidden-xs hidden-sm">{{ player.role }}</td>
+            <td class="epgp_bold">
+                {{ player.name }}
+                {% for alt in player.alts %}
+                    <small class="text-muted">| {{ alt.name }}</small>
+                {% endfor %}
+                <a href="/raider/{{ player.name | replace(" ", "_") }}"></a>
+                {#- Deadlis made me do it! -#}
+                {%- if player.name == 'Deadlis Leporidae' -%}
+                    <span style="visibility: hidden">massive faggot</span>
+                {%- endif -%}
+                {%- set autists = [
+                        'Nami Spitfire',
+                        'Deadlis Leporidae',
+                        'Ser Syrinx',
+                        'Chickenstew Delicious',
+                        'Nyx Erris'] -%}
+                {%- if player.name in autists -%}
+                    <span style="visibility: hidden">autist</span>
+                {%- endif -%}
+            </td>
+            <td>{{ player.ep }}</td>
+            <td>{{ player.gp }}</td>
+            <td>{{ '%0.2f' | format(player.pr) }}</td>
+            </tr>
+            {% endfor -%}
+            </tbody>
+        </table>
+    </div>
+{% endblock -%}

@@ -1,0 +1,7 @@
+{% extends 'base.tpl' %}
+{% block content %}
+    <div class="rules col-lg-10">
+        <iframe src="https://docs.google.com/spreadsheets/d/1hR_cqyZJN5ni-dWGgdYxSQYPLgh50wCj6yiZu8COwoA/pubhtml?widget=true&amp;headers=false"
+                height="900px" width="100%"></iframe>
+    </div>
+{% endblock %}

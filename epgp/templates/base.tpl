@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="/epgp/static/favicon.ico">
+
+    <title>ADK WildStar: EPGP</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="/epgp/static/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/epgp/static/css/epgp.css"/>
+    {% block style -%}{% endblock -%}
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar"
+                    aria-expanded="true" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">ADK WildStar</a>
+        </div>
+        <div id="navbar" class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                {% if current_user.is_authenticated -%}
+                    <li><a href="/import">Import Data</a></li>
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                {% endif %}
+            </ul>
+        </div>
+        <!--/.nav-collapse -->
+    </div>
+</nav>
+
+<div class="body">
+    {% block sidebar -%}
+        <div class="col-lg-2 well">
+            <ul class="raider-nav nav nav-pills nav-stacked text-center">
+                <li class="list-group-item"><a href="/">Back</a></li>
+            </ul>
+        </div>
+    {% endblock %}
+    {% block content -%}{% endblock -%}
+</div>
+
+<script src="/epgp/static/js/jquery.js"></script>
+<script src="/epgp/static/js/jabbitTooltip.js"></script>
+<script src="/epgp/static/js/bootstrap.min.js"></script>
+<script src="/epgp/static/js/tablesort.js"></script>
+<script>JH_options = {colors: true, names: true, whitebg: false, preload: true, zIndex: null};</script>
+<script src="/epgp/static/js/epgp.js"></script>
+
+</body>
+</html>
