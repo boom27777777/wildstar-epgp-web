@@ -1,6 +1,6 @@
 {% extends "base.tpl.html" -%}
 {% block sidebar -%}
-    <div class="sidebar col-lg-2">
+    <div id="navcontainer" class="sidebar col-lg-2">
         <div class="well">
             <ul class="nav nav-pills nav-stacked text-center">
                 <li><input type="text" id="form-filter" placeholder="Search Table" class="form-control"/></li>
@@ -24,7 +24,7 @@
     </div>
 {% endblock %}
 {% block content -%}
-    <div class="content col-lg-10">
+    <div id="guildcontainer" class="content col-lg-10">
         <table id="guild-table" class="table table-hover table-bordered table-responsive">
             <thead>
             <tr>
