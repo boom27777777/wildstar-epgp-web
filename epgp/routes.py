@@ -44,7 +44,7 @@ def do_login():
             if next_url == 'login':
                 return flask.abort(400)
             return flask.redirect('/')
-    return flask.render_template('login.tpl')
+    return flask.render_template('login.tpl.html')
 
 
 @app.route('/logout')
@@ -89,7 +89,7 @@ def do_import():
 
 @app.route('/rules')
 def rules():
-    return flask.render_template('rules.tpl')
+    return flask.render_template('rules.tpl.html')
 
 
 @app.route('/api/export/all')

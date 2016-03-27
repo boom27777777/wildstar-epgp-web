@@ -8,7 +8,7 @@ class Index:
         self.add_player = self.guild.add_player
 
     def render(self):
-        return flask.render_template('index.tpl', guild=self.guild)
+        return flask.render_template('index.tpl.html', guild=self.guild)
 
 
 class Raider:
@@ -16,7 +16,7 @@ class Raider:
         self.raider = raider
 
     def render(self):
-        return flask.render_template('raider.tpl', raider=self.raider)
+        return flask.render_template('raider.tpl.html', raider=self.raider)
 
 
 class Loot:
@@ -24,7 +24,7 @@ class Loot:
         self.guild = guild
 
     def render(self):
-        return flask.render_template('loot.tpl', guild=self.guild)
+        return flask.render_template('loot.tpl.html', guild=self.guild)
 
 
 class Import:
@@ -32,4 +32,4 @@ class Import:
         self.guild = guild
 
     def render(self):
-        return flask.render_template('import.tpl', guild=self.guild)
+        return flask.render_template('import.tpl.html', guild=self.guild)
