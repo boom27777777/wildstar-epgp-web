@@ -132,3 +132,11 @@ table.nav-table {
         float: right;
     }
 }
+
+tr.on-day {
+    background-color: #c1c1c1;
+}
+
+tr.off-day {
+
+}

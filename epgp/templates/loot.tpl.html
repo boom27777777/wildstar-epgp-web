@@ -1,4 +1,4 @@
-{% extends 'base.tpl.html' %}
+{% extends 'base.tpl.html' -%}
 {% block content -%}
     <div class="content col-lg-6 col-lg-offset-1">
         {% if guild.logs -%}
@@ -14,13 +14,18 @@
                 </tr>
                 </thead>
                 <tbody>
-                {% set day = '' %}
+                {% set day = '' -%}
+                {% set class = 'on-day' -%}
                 {% for raider, entry in guild.logs -%}
-                    {% if day != entry.strDate %}
-                        <tr class="break"></tr>
-                    {% endif %}
-                    {% set day = entry.strDate %}
-                    <tr>
+                    {% if day != entry.strDate -%}
+                        {% if class == 'on-day' -%}
+                            {% set class = 'off-day' -%}
+                        {% else -%}
+                            {% set class = 'on-day' -%}
+                        {% endif -%}
+                    {% endif -%}
+                    {% set day = entry.strDate -%}
+                    <tr class="{{ class }}">
                         <td>{{ entry.strDate }}</td>
                         <td>{{ entry.strTime }}</td>
                         <td>{{ raider }}</td>
