@@ -123,3 +123,12 @@ table.nav-table {
     margin-bottom: 5px;
 }
 
+@media (min-width: 1200px){
+    #navcontainer {
+        position: fixed;
+    }
+
+    #guildcontainer {
+        float: right;
+    }
+}
