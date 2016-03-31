@@ -4,7 +4,7 @@ from flask_login import login_user, login_required, logout_user
 
 from epgp import get_resource
 from epgp.database import db_session
-from epgp.user import User
+from epgp.user import User, user_by_api
 from epgp.application import app, login_manager, guild, build_pages
 from epgp.pages import Raider
 
@@ -113,5 +113,20 @@ def api_import():
         guild.from_json(form['json-data'])
         guild.export(get_resource('data', 'guild-{}.json'.format(time.time())))
     except BaseException:
+        return flask.abort(422)
+    return '{"status":"success"}', 200
+
+
+@app.route('/api/decay/all', methods=['POST'])
+def api_decay():
+    form = flask.request.form
+    user = user_by_api(form['api-key'])
+    if not user:
+        return '{"status":"failed","reason":"Unauthorized"}', 401
+    try:
+        guild.decay()
+        guild.from_json(guild.export())
+        guild.export(get_resource('data', 'guild-{}.json'.format(time.time())))
+    except BaseException as e:
         return flask.abort(422)
     return '{"status":"success"}', 200

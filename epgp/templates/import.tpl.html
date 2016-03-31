@@ -1,4 +1,5 @@
 {% extends 'base.tpl.html' %}
+{% set api_key = current_user._api_key | replace("'", '') | replace ('b', '') %}
 {% block sidebar %}
     <div class="col-lg-2">
         <div class="well">
@@ -8,7 +9,14 @@
         </div>
         <div class="alert alert-info text-center" role="alert">
             Your personal API key:
-            <code>{{ current_user._api_key | replace("'", '') | replace ('b', '') }}</code>
+            <code>{{ api_key }}</code>
+        </div>
+        <div class="alert alert-danger text-center">
+            <h4>Warning, this will instantly decay all users</h4>
+            <form action="/api/decay/all" method="post">
+                <input type="text" name="api-key" style="visibility: hidden" value="{{ api_key }}">
+                <button class="btn btn-danger" style="width: 100%;">Decay</button>
+            </form>
         </div>
     </div>
 {% endblock %}

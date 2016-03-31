@@ -37,6 +37,9 @@ class Guild:
         logs = {'logs': self.logs}
         return json.dumps(logs)
 
+    def refresh(self):
+        self.from_json(self.export())
+
     def add_player(self, name, _class=None, _roll=None):
         player = {'strName': name, 'class': _class, 'role': _roll}
         self._members.append(Player(player))
@@ -45,6 +48,39 @@ class Guild:
         for player_obj in self._members:
             if player_obj.name == player:
                 return player_obj
+
+    def decay(self, percent: float = 0.1):
+        log_time = round(time.time(), 0)
+        for player in self._members:
+            d_gp = round(player.gp * percent, 0)
+            if player.gp - d_gp < 2000:
+                d_gp = 2000 - player.gp
+            player.raw_data['GP'] -= d_gp
+            player.gp = player.raw_data['GP']
+            player.logs.insert(0,
+                               {
+                                   'nAfter': player.gp,
+                                   'strModifier': '{}'.format(-d_gp),
+                                   'strComment': '10% GP Decay',
+                                   'nDate': log_time,
+                                   'strType': '{Decay}',
+                                   'strGroup': 'Def'
+                               })
+
+            d_ep = round(player.ep * percent, 0)
+            player.raw_data['EP'] -= d_ep
+            player.ep = player.raw_data['EP']
+            player.logs.insert(0,
+                               {
+                                   'nAfter': player.ep,
+                                   'strModifier': '{}'.format(-d_ep),
+                                   'strComment': '10% EP Decay',
+                                   'nDate': round(time.time(), 0),
+                                   'strType': '{Decay}',
+                                   'strGroup': 'Def'
+                               })
+
+        self.refresh()
 
     @property
     def _public_members(self):
@@ -107,15 +143,15 @@ class Player:
         :param player_dict:
 /            Must contain keys: strName
         """
-
-        self.name = player_dict['strName']
+        self.raw_data = player_dict
+        self.name = self.raw_data['strName']
 
         # Ain't nobody got space for all this
-        get = lambda key, default: player_dict.setdefault(key, default)
+        get = lambda key, default: self.raw_data.setdefault(key, default)
 
         self.class_name = get('class', 'N/A')
-        self.gp = get('GP', 0)
-        self.ep = get('EP', 0)
+        self.gp = int(get('GP', 0))
+        self.ep = int(get('EP', 0))
         self.base_gp = get('nBaseGP', 1000)
         self.role = get('role', 'DPS')
         self.off_role = get('offrole', 'N/A')
@@ -128,11 +164,11 @@ class Player:
         self.armory = get('tArmoryEntry', [])
 
         try:
-            self._fix_dates()
+            self.fix_dates()
         except:
             a = 1
 
-    def _fix_dates(self):
+    def fix_dates(self):
         for line in self.logs:
             try:
                 line['strDate'] = datetime.fromtimestamp(

@@ -70,3 +70,8 @@ def hash(password):
     hasher = md5()
     hasher.update(bytes(password, 'utf8'))
     return hasher.digest()
+
+
+def user_by_api(api_key):
+    return User.query.filter(
+        User._api_key == bytes(api_key.replace('\\n', '\n'), 'utf8')).first()
