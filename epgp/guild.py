@@ -9,7 +9,7 @@ class Guild:
         self._members = []
         self.data = None
 
-    def from_json(self, blob, append=False):
+    def from_json(self, blob, append=False, _fix=False):
         if type(blob) is str:
             self.data = json.loads(blob)
             self.last_update = datetime.fromtimestamp(
@@ -26,6 +26,9 @@ class Guild:
             player = Player(member)
             self._members.append(player)
 
+        if not _fix:
+            self.fix_dict_logs()
+
     def export(self, path=None):
         if path is None:
             return json.dumps(self.data)
@@ -37,8 +40,8 @@ class Guild:
         logs = {'logs': self.logs}
         return json.dumps(logs)
 
-    def refresh(self):
-        self.from_json(self.export())
+    def refresh(self, _fix=False):
+        self.from_json(self.export(), _fix=_fix)
 
     def add_player(self, name, _class=None, _roll=None):
         player = {'strName': name, 'class': _class, 'role': _roll}
@@ -81,6 +84,13 @@ class Guild:
                                })
 
         self.refresh()
+
+    def fix_dict_logs(self):
+        for raider in self._members:
+            if type(raider.logs) is dict:
+                raider.raw_data['logs'] = [v for v in raider.logs.values()]
+
+        self.refresh(_fix=True)
 
     @property
     def _public_members(self):
@@ -155,7 +165,7 @@ class Player:
         self.base_gp = get('nBaseGP', 1000)
         self.role = get('role', 'DPS')
         self.off_role = get('offrole', 'N/A')
-        self.logs = get('logs', [])
+        self.logs = get('logs', {})
         self.l_logs = get('tLLogs', [])
         self.tot = get('tot', 0)
         self.net = get('net', 0)
