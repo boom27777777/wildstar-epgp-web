@@ -60,28 +60,30 @@ class Guild:
                 d_gp = 2000 - player.gp
             player.raw_data['GP'] -= d_gp
             player.gp = player.raw_data['GP']
-            player.logs.insert(0,
-                               {
-                                   'nAfter': player.gp,
-                                   'strModifier': '{}'.format(-d_gp),
-                                   'strComment': '10% GP Decay',
-                                   'nDate': log_time,
-                                   'strType': '{Decay}',
-                                   'strGroup': 'Def'
-                               })
+            player.logs.insert(
+                0,
+                {
+                    'nAfter': player.gp,
+                    'strModifier': '{}'.format(-d_gp),
+                    'strComment': '10% GP Decay',
+                    'nDate': log_time,
+                    'strType': '{Decay}',
+                    'strGroup': 'Def'
+                })
 
             d_ep = round(player.ep * percent, 0)
             player.raw_data['EP'] -= d_ep
             player.ep = player.raw_data['EP']
-            player.logs.insert(0,
-                               {
-                                   'nAfter': player.ep,
-                                   'strModifier': '{}'.format(-d_ep),
-                                   'strComment': '10% EP Decay',
-                                   'nDate': round(time.time(), 0),
-                                   'strType': '{Decay}',
-                                   'strGroup': 'Def'
-                               })
+            player.logs.insert(
+                0,
+                {
+                    'nAfter': player.ep,
+                    'strModifier': '{}'.format(-d_ep),
+                    'strComment': '10% EP Decay',
+                    'nDate': round(time.time(), 0),
+                    'strType': '{Decay}',
+                    'strGroup': 'Def'
+                })
 
         self.refresh()
 
@@ -151,7 +153,7 @@ class Player:
         """Initializes a new player from a dictionary
 
         :param player_dict:
-/            Must contain keys: strName
+            Must contain keys: strName
         """
         self.raw_data = player_dict
         self.name = self.raw_data['strName']
@@ -165,7 +167,7 @@ class Player:
         self.base_gp = get('nBaseGP', 1000)
         self.role = get('role', 'DPS')
         self.off_role = get('offrole', 'N/A')
-        self.logs = get('logs', {})
+        self._logs = get('logs', {})
         self.l_logs = get('tLLogs', [])
         self.tot = get('tot', 0)
         self.net = get('net', 0)
@@ -204,6 +206,16 @@ class Player:
                 gear.append(item)
         return gear
 
+    @property
+    def logs(self):
+        if self._logs:
+            return sorted(
+                self._logs,
+                key=lambda x: x['nDate'] if type(x) is dict else 0,
+                reverse=True
+            )
+        else:
+            return []
 
     def __repr__(self):
         return self.name
