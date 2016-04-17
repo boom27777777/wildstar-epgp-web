@@ -1,4 +1,5 @@
 import time
+import os
 
 import flask
 from flask_login import login_user, login_required, logout_user
@@ -9,6 +10,7 @@ from epgp.application import app, login_manager, guild, index_page, \
 from epgp.database import db_session
 from epgp.db_objects.user import User, user_by_api
 from epgp.pages import Raider
+import epgp.scripts.concat_logs as concat_script
 
 
 @app.route('/')
@@ -76,13 +78,16 @@ def serve_static(path):
 def api_import():
     form = flask.request.form
     user = user_by_api(form['api-key'])
-    # User.query.filter(
-    #     User._api_key == bytes(form['api-key'].replace('\\n', '\n'), 'utf8')).first()
     if not user:
         return '{"status":"failed","reason":"Unauthorized"}', 401
     try:
         guild.from_json(form['json-data'])
         guild.export(get_resource('data', 'guild-{}.json'.format(time.time())))
+        concat_script.fix(3)
+        json_file = sorted(
+            [f for f in os.listdir(get_resource('data')) if '.json' in f], reverse=True)
+
+        guild.from_json(open(get_resource('data', json_file[0])))
     except BaseException:
         return flask.abort(422)
     return '{"status":"success"}', 200

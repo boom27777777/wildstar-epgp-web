@@ -20,21 +20,25 @@ def trim_logs(member: Player):
     member.raw_data['logs'] = clean
 
 
-def fix():
+def fix(depth: int = -0):
     json_file = sorted(
         [f for f in os.listdir(get_resource('data')) if '.json' in f],
         reverse=True)
     log_1 = json_file[0]
     guild_1 = Guild()
     guild_1.from_json(open(get_resource('data', log_1)))
+    if depth == -1:
+        log_depth = json_file[1:]
+    else:
+        log_depth = json_file[1:depth]
 
-    for log_file in json_file:
+    for log_file in log_depth:
         add_logs(guild_1, log_file)
 
     for member in guild_1._members:
         trim_logs(member)
 
-    guild_1.export(get_resource('data', 'guild-{}.json.debug'.format(time.time())))
+    guild_1.export(get_resource('data', 'guild-{}.json'.format(time.time())))
 
 
 if __name__ == '__main__':
