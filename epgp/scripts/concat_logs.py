@@ -28,9 +28,9 @@ def fix(depth: int = -0):
     guild_1 = Guild()
     guild_1.from_json(open(get_resource('data', log_1)))
     if depth == -1:
-        log_depth = json_file[1:]
+        log_depth = json_file
     else:
-        log_depth = json_file[1:depth]
+        log_depth = json_file[:depth]
 
     for log_file in log_depth:
         add_logs(guild_1, log_file)
