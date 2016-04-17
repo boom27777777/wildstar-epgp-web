@@ -33,3 +33,11 @@ class Import:
 
     def render(self):
         return flask.render_template('import.tpl.html', guild=self.guild)
+
+
+class Edit:
+    def __init__(self, guild):
+        self.guild = guild
+
+    def render(self):
+        return flask.render_template('edit.tpl.html', guild=self.guild)

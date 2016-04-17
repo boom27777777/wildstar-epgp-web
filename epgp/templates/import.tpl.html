@@ -22,10 +22,11 @@
 {% endblock %}
 {% block content -%}
     <div class="col-lg-6">
-        <form action="/do-import" method="POST">
+        <form action="/api/import" method="POST">
             <textarea name="json-data" id="import-text" cols="30" rows="10" placeholder="Paste Data Here"
-                      class="form-control"></textarea>
-            <button class="btn">Submit</button>
+                      class="form-control" spellcheck="false"></textarea>
+            <button class="btn align-right">Submit</button>
+            <input type="text" name="api-key" value="{{ current_user.api_key }}" style="visibility: hidden;">
         </form>
     </div>
 {% endblock %}

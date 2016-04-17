@@ -39,9 +39,9 @@
             <tbody id="guild-body">
             {% for player in guild.by_pr | reverse -%}
                 {% if player.ep < 1500 %}
-                    <tr class="ep-below alert alert-warning">
+                    <tr class="guild-index ep-below alert alert-warning">
                         {% else %}
-                    <tr>
+                    <tr class="guild-index">
                 {% endif %}
             <td class="hidden-xs hidden-sm">{{ player.class_name }}</td>
             <td class="hidden-xs hidden-sm">{{ player.role }}</td>

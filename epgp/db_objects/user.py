@@ -34,7 +34,9 @@ class User(Base):
         self._api_key = encodebytes(hash('Nope{}'.format(time.time())))
 
     def generate_api(self):
-        self._api_key = encodebytes(hash('Nope{}'.format(time.time())))
+        self._api_key = encodebytes(hash('Nope{}'.format(time.time()))).decode()
+        self._api_key = self._api_key.replace('\n', '')
+
 
     @hybrid_method
     def validate(self, password):
@@ -59,6 +61,10 @@ class User(Base):
     def id(self):
         return self._id
 
+    @property
+    def api_key(self):
+        return self._api_key
+
     def get_id(self):
         return self.id
 
@@ -73,5 +79,6 @@ def hash(password):
 
 
 def user_by_api(api_key):
-    return User.query.filter(
-        User._api_key == bytes(api_key.replace('\\n', '\n'), 'utf8')).first()
+    for user in User.query.all():
+        if user.api_key == api_key:
+            return User

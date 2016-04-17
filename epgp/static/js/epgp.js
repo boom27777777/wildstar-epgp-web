@@ -2,7 +2,7 @@ $(document).ready(function () {
     $('#guild-table').tablesorter();
 });
 
-$("tbody#guild-body > tr").hover(
+$("tbody#guild-body > tr.guild-index").hover(
     function () {
         $(this).addClass("active");
     },

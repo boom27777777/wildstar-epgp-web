@@ -1,0 +1,100 @@
+{% extends "base.tpl.html" -%}
+{% block sidebar -%}
+    <div id="navcontainer" class="sidebar col-lg-2">
+        <div class="well">
+            <ul class="nav nav-pills nav-stacked text-center">
+                <li><input type="text" id="form-filter" placeholder="Search Table" class="form-control"/></li>
+                <li><a href="/" class="list-group-item">Back</a></li>
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+{% block content -%}
+    <div id="guildcontainer" class="content col-lg-10">
+        <table id="guild-table" class="table table-hover table-bordered table-responsive">
+            <thead>
+            <tr>
+                <th class="epgp_med header-class hidden-xs hidden-sm">Class</th>
+                <th class="epgp_med header-role hidden-xs hidden-sm">Role</th>
+                <th class="epgp_med header-raider">Raider</th>
+                <th class="epgp_med header-ep">EP</th>
+                <th class="epgp_med header-gp">GP</th>
+            </tr>
+            </thead>
+            <tbody id="guild-body">
+            {% for player in guild.by_pr | reverse -%}
+                {% if player.ep < 1500 %}
+                    <tr class="ep-below alert alert-warning">
+                        {% else %}
+                    <tr>
+                {% endif %}
+            <td>
+                <div class="dropdown">
+                    <button class="edit-btn btn dropdown-toggle" type="button" data-toggle="dropdown">
+                        {{ player.class_name }} <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        {% for class in [
+                            'Spellslinger',
+                            'Engineer',
+                            'Medic',
+                            'Esper',
+                            'Stalker',
+                            'Warrior'
+                        ] %}
+                            {% if class != player.class_name %}
+                                <button class="edit-btn btn dropdown-item" type="button">{{ class }}</button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+            <td class="hidden-xs hidden-sm">
+                <div class="dropdown">
+
+                    <button class="edit-btn btn dropdown-toggle" type="button" data-toggle="dropdown">
+                        {{ player.role }} <span class="caret"></span>
+                    </button>
+                    <div class="dropdown-menu">
+                        {% for role in ['DPS', 'Heal', 'Tank'] %}
+                            {% if role != player.role %}
+                                <button class="edit-btn btn dropdown-item" type="button">{{ role }}</button>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
+            </td>
+            <td class="epgp_bold">
+                {{ player.name }}
+                {% for alt in player.alts %}
+                    <small class="text-muted">| {{ alt.name }}</small>
+                {% endfor %}
+                <a href="/raider/{{ player.name | replace(" ", "_") }}"></a>
+                {#- Deadlis made me do it! -#}
+                {%- if player.name == 'Deadlis Leporidae' -%}
+                    <span style="visibility: hidden">massive faggot</span>
+                {%- endif -%}
+                {%- set autists = [
+                        'Nami Spitfire',
+                        'Deadlis Leporidae',
+                        'Ser Syrinx',
+                        'Chickenstew Delicious',
+                        'Nyx Erris'] -%}
+                {%- if player.name in autists -%}
+                    <span style="visibility: hidden">autist</span>
+                {%- endif -%}
+            </td>
+            <td>
+                <input class="form-control" type="number" name="ep" value="{{ player.ep }}">
+                <span class="hidden">{{ player.ep }}</span>
+            </td>
+            <td>
+                <input class="form-control" type="number" name="gp" value="{{ player.gp }}">
+                <span class="hidden">{{ player.gp }}</span>
+            </td>
+            </tr>
+            {% endfor -%}
+            </tbody>
+        </table>
+    </div>
+{% endblock -%}

@@ -1,15 +1,14 @@
 import time
+
 import flask
 from flask_login import login_user, login_required, logout_user
 
 from epgp import get_resource
+from epgp.application import app, login_manager, guild, index_page, \
+    import_page, loot_page, edit_page
 from epgp.database import db_session
-from epgp.user import User, user_by_api
-from epgp.application import app, login_manager, guild, build_pages
+from epgp.db_objects.user import User, user_by_api
 from epgp.pages import Raider
-
-
-index_page, loot_page, import_page = build_pages(guild)
 
 
 @app.route('/')
@@ -31,6 +30,11 @@ def loot():
     return loot_page.render()
 
 
+@app.route('/edit')
+def edit():
+    return edit_page.render()
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def do_login():
     if flask.request.method.lower() == 'post':
@@ -47,6 +51,11 @@ def do_login():
     return flask.render_template('login.tpl.html')
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter(User._id == user_id).first()
+
+
 @app.route('/logout')
 @login_required
 def logout():
@@ -54,19 +63,29 @@ def logout():
     return flask.redirect('/')
 
 
-@login_manager.user_loader
-def load_user(user_id):
-    return User.query.filter(User._id == user_id).first()
-
-
 @app.teardown_appcontext
 def shutdown_session(exception=None):
     db_session.remove()
 
-
 @app.route('/epgp/static/<path:path>')
 def serve_static(path):
     return app.send_static_file(path)
+
+
+@app.route('/api/import', methods=['POST'])
+def api_import():
+    form = flask.request.form
+    user = user_by_api(form['api-key'])
+    # User.query.filter(
+    #     User._api_key == bytes(form['api-key'].replace('\\n', '\n'), 'utf8')).first()
+    if not user:
+        return '{"status":"failed","reason":"Unauthorized"}', 401
+    try:
+        guild.from_json(form['json-data'])
+        guild.export(get_resource('data', 'guild-{}.json'.format(time.time())))
+    except BaseException:
+        return flask.abort(422)
+    return '{"status":"success"}', 200
 
 
 @app.route('/import')
@@ -96,25 +115,9 @@ def rules():
 def api_export():
     return guild.export()
 
-
 @app.route('/api/export/loot')
 def api_export_loot():
     return guild.export_loot()
-
-
-@app.route('/api/import', methods=['POST'])
-def api_import():
-    form = flask.request.form
-    user = User.query.filter(
-        User._api_key == bytes(form['api-key'].replace('\\n', '\n'), 'utf8')).first()
-    if not user:
-        return '{"status":"failed","reason":"Unauthorized"}', 401
-    try:
-        guild.from_json(form['json-data'])
-        guild.export(get_resource('data', 'guild-{}.json'.format(time.time())))
-    except BaseException:
-        return flask.abort(422)
-    return '{"status":"success"}', 200
 
 
 @app.route('/api/decay/all', methods=['POST'])

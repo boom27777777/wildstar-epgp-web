@@ -3,7 +3,7 @@ from flask import Flask
 from flask_login import LoginManager
 
 from epgp import get_resource
-from epgp.pages import Index, Loot, Import
+from epgp.pages import Index, Loot, Import, Edit
 from epgp.guild import Guild
 
 
@@ -23,10 +23,7 @@ if json_file:
 else:
     app.logger.error('Failed to load json')
 
-
-def build_pages(gld):
-    index_page = Index(gld)
-    loot_page = Loot(gld)
-    import_page = Import(gld)
-
-    return index_page, loot_page, import_page
+index_page = Index(guild)
+loot_page = Loot(guild)
+import_page = Import(guild)
+edit_page = Edit(guild)
