@@ -1,0 +1,10 @@
+{% extends 'base.tpl.html' %}
+{% block content %}
+    <div class="col-lg-6">
+        <form action="/api/suggest" method="POST">
+            <textarea name="suggestion" id="import-text" cols="30" rows="10" placeholder="What's on your mind?"
+                      class="form-control" spellcheck="false"></textarea>
+            <button class="btn align-right">Submit</button>
+        </form>
+    </div>
+{% endblock %}

@@ -15,5 +15,6 @@ Base.query = db_session.query_property()
 # noinspection PyUnresolvedReferences
 def init_db():
     import epgp.db_objects.user
+    import epgp.db_objects.suggestion
 
     Base.metadata.create_all(bind=engine)

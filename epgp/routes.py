@@ -9,6 +9,7 @@ from epgp.application import app, login_manager, guild, index_page, \
     import_page, loot_page, edit_page
 from epgp.database import db_session
 from epgp.db_objects.user import User, user_by_api
+from epgp.db_objects.suggestion import Suggestion
 from epgp.pages import Raider
 import epgp.scripts.concat_logs as concat_script
 
@@ -35,6 +36,20 @@ def loot():
 @app.route('/edit')
 def edit():
     return edit_page.render()
+
+
+@app.route('/suggest')
+def suggest():
+    return flask.render_template('suggest.tpl.html')
+
+
+@app.route('/suggestions')
+@login_required
+def suggestions():
+    return flask.render_template(
+        'suggestions.tpl.html',
+        suggestions=Suggestion.query.all()
+    )
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -138,3 +153,13 @@ def api_decay():
     except BaseException as e:
         return flask.abort(422)
     return '{"status":"success"}', 200
+
+
+@app.route('/api/suggest', methods=['POST'])
+def api_suggest():
+    form = flask.request.form
+    suggestion = Suggestion(form['suggestion'])
+    db_session.add(suggestion)
+    db_session.commit()
+
+    return flask.redirect('/')

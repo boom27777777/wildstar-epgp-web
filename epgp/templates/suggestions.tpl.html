@@ -1,0 +1,17 @@
+{% extends 'base.tpl.html' %}
+{% block content %}
+    <div class="col-lg-6">
+        <table class="table table-bordered">
+            <tr>
+                <th>Id</th>
+                <th>Suggestion</th>
+            </tr>
+            {% for suggestion in suggestions %}
+                <tr>
+                    <td>{{ suggestion._id }}</td>
+                    <td>{{ suggestion.body }}</td>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
