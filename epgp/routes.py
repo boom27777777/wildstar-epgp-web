@@ -1,5 +1,6 @@
 import time
 import os
+import re
 
 import flask
 from flask_login import login_user, login_required, logout_user
@@ -158,7 +159,8 @@ def api_decay():
 @app.route('/api/suggest', methods=['POST'])
 def api_suggest():
     form = flask.request.form
-    suggestion = Suggestion(form['suggestion'])
+    tmp_suggest = re.sub(r'[^a-zA-z0-9 .,;\-\/_\'"]*', '', form['suggestion'])
+    suggestion = Suggestion(tmp_suggest)
     db_session.add(suggestion)
     db_session.commit()
 
