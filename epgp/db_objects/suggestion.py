@@ -9,3 +9,7 @@ class Suggestion(Base):
 
     def __init__(self, suggestion):
         self.body = suggestion
+
+    @property
+    def id(self):
+        return self._id

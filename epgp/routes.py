@@ -165,3 +165,14 @@ def api_suggest():
     db_session.commit()
 
     return flask.redirect('/')
+
+
+@app.route('/api/suggest/delete', methods=['POST'])
+def api_delete_suggestion():
+    form = flask.request.form
+    sug_id = int(form['suggestion-id'])
+    suggestion = Suggestion.query.filter(Suggestion._id == sug_id).first()
+    db_session.delete(suggestion)
+    db_session.commit()
+
+    return flask.redirect('/suggestions')
