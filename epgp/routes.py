@@ -170,6 +170,10 @@ def api_suggest():
 @app.route('/api/suggest/delete', methods=['POST'])
 def api_delete_suggestion():
     form = flask.request.form
+    user = user_by_api(form['api-key'])
+    if not user:
+        return build_api_response(False, 'Unauthorized'), 401
+
     sug_id = int(form['suggestion-id'])
     suggestion = Suggestion.query.filter(Suggestion._id == sug_id).first()
     db_session.delete(suggestion)

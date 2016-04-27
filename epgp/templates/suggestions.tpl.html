@@ -12,6 +12,7 @@
                     <td>
                         <form class="api-form" action="/api/suggest/delete" method="post">
                             <input type="hidden" name="suggestion-id" id="suggestion-id" value="{{ suggestion._id }}">
+                            <input type="hidden" name="api-key" id="api-key" value="{{ current_user.api_key }}">
                             <button class="btn btn-danger">Delete</button>
                         </form>
                     </td>
