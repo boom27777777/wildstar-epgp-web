@@ -3,13 +3,11 @@
     <div class="col-lg-6">
         <table class="table table-bordered">
             <tr>
-                <th>Id</th>
                 <th>Suggestion</th>
                 <th></th>
             </tr>
             {% for suggestion in suggestions %}
                 <tr>
-                    <td>{{ suggestion.id }}</td>
                     <td style="width: 99%"><p>{{ suggestion.body }}</p></td>
                     <td>
                         <form action="/api/suggest/delete" method="post">
