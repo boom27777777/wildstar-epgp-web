@@ -60,7 +60,7 @@ class Guild:
                 d_gp = 2000 - player.gp
             player.raw_data['GP'] -= d_gp
             player.gp = player.raw_data['GP']
-            player.logs.insert(
+            player.raw_data['logs'].insert(
                 0,
                 {
                     'nAfter': player.gp,
@@ -74,7 +74,7 @@ class Guild:
             d_ep = round(player.ep * percent, 0)
             player.raw_data['EP'] -= d_ep
             player.ep = player.raw_data['EP']
-            player.logs.insert(
+            player.raw_data['logs'].insert(
                 0,
                 {
                     'nAfter': player.ep,
