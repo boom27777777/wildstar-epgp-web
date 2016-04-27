@@ -176,6 +176,9 @@ def api_delete_suggestion():
 
     sug_id = int(form['suggestion-id'])
     suggestion = Suggestion.query.filter(Suggestion._id == sug_id).first()
+    if not suggestion:
+        return build_api_response(False, 'Suggestion not found'), 404
+
     db_session.delete(suggestion)
     db_session.commit()
 
