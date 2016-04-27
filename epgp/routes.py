@@ -1,6 +1,7 @@
 import time
 import os
 import re
+from json import dumps
 
 import flask
 from flask_login import login_user, login_required, logout_user
@@ -90,12 +91,19 @@ def serve_static(path):
     return app.send_static_file(path)
 
 
+def build_api_response(success: bool, message: str = "", redirect: str = ""):
+    return dumps({
+        'status': 'success' if success else 'failed',
+        'message': message,
+        'redirect': redirect
+    })
+
 @app.route('/api/import', methods=['POST'])
 def api_import():
     form = flask.request.form
     user = user_by_api(form['api-key'])
     if not user:
-        return '{"status":"failed","reason":"Unauthorized"}', 401
+        return build_api_response(False, 'Unauthorized'), 401
     try:
         guild.from_json(form['json-data'])
         guild.export(get_resource('data', 'guild-{}.json'.format(time.time())))
@@ -105,26 +113,16 @@ def api_import():
 
         guild.from_json(open(get_resource('data', json_file[0])))
     except BaseException:
-        return flask.abort(422)
-    return '{"status":"success"}', 200
+        return build_api_response(False, 'Failed to process input data, try '
+                                         'pasting again'), 422
+
+    return build_api_response(True, 'Successfully imported data'), 200
 
 
 @app.route('/import')
 @login_required
 def import_data():
     return import_page.render()
-
-
-@app.route('/do-import', methods=['POST'])
-@login_required
-def do_import():
-    data = flask.request.form['json-data']
-    try:
-        guild.from_json(data)
-        guild.export(get_resource('data', 'guild-{}.json'.format(time.time())))
-    except BaseException:
-        return flask.abort(422)
-    return flask.redirect('/')
 
 
 @app.route('/rules')
@@ -146,14 +144,16 @@ def api_decay():
     form = flask.request.form
     user = user_by_api(form['api-key'])
     if not user:
-        return '{"status":"failed","reason":"Unauthorized"}', 401
+        return build_api_response(False, 'Unauthorized'), 401
     try:
         guild.decay()
         guild.from_json(guild.export())
         guild.export(get_resource('data', 'guild-{}.json'.format(time.time())))
     except BaseException as e:
-        return flask.abort(422)
-    return '{"status":"success"}', 200
+        app.logger.error('api_decay: %s', str(e.args))
+        return build_api_response(False, 'An unknown error occurred, time to '
+                                         'call Boom!'), 422
+    return build_api_response(True, 'Successfully decayed guild'), 200
 
 
 @app.route('/api/suggest', methods=['POST'])
@@ -164,7 +164,7 @@ def api_suggest():
     db_session.add(suggestion)
     db_session.commit()
 
-    return flask.redirect('/')
+    return build_api_response(True, redirect='/')
 
 
 @app.route('/api/suggest/delete', methods=['POST'])
@@ -175,4 +175,4 @@ def api_delete_suggestion():
     db_session.delete(suggestion)
     db_session.commit()
 
-    return flask.redirect('/suggestions')
+    return build_api_response(True, redirect='/suggestions')

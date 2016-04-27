@@ -10,8 +10,8 @@ $("tbody#guild-body > tr.guild-index").hover(
         $(this).removeClass("active");
     }
 ).click(function () {
-        window.location.href = $(this).find("td.epgp_bold > a").attr("href");
-    });
+    window.location.href = $(this).find("td.epgp_bold > a").attr("href");
+});
 
 $("#form-filter").keyup(function () {
     //split the current value of searchInput
@@ -37,7 +37,7 @@ $("#form-filter").keyup(function () {
             .replace(/\W/gm, '');
         return search.indexOf(substring.toLowerCase()) > -1;
     })
-        //show the rows that match.
+    //show the rows that match.
         .show();
 }).focus(function () {
     this.value = "";
@@ -47,4 +47,40 @@ $("#form-filter").keyup(function () {
     $(this).unbind('focus');
 }).css({
     "background-color": "#E6E6E6"
+});
+
+$("form.api-form").submit(function (event) {
+    event.preventDefault();
+    var form_obj = {};
+    $(this).children().each(function (index, input) {
+        if (input.name !== "") {
+            form_obj[input.name] = input.value;
+        }
+    });
+    if ($(this).attr('data-toast') !== undefined) {
+        toastr.info($(this).attr('data-toast'));
+    }
+    var submit_btn = $('button', $(this));
+    submit_btn.addClass('active');
+    submit_btn.prop('disabled', true);
+    $.post({
+        url: $(this).attr('action'),
+        data: form_obj,
+        dataType: 'json'
+    }, function (status) {
+        if (status.message !== "") {
+            toastr.success(status.message);
+        }
+        if (status.redirect !== "") {
+            window.location.href = status.redirect;
+        }
+    })
+        .fail(function (data) {
+            var status = $.parseJSON(data.responseText);
+            toastr.error(status.message);
+        })
+        .always(function () {
+            submit_btn.removeClass('active');
+            submit_btn.prop('disabled', false);
+        });
 });

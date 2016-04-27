@@ -13,8 +13,8 @@
         </div>
         <div class="alert alert-danger text-center">
             <h4>Warning, this will instantly decay all users</h4>
-            <form action="/api/decay/all" method="post">
-                <input type="text" name="api-key" style="visibility: hidden" value="{{ api_key }}">
+            <form class="api-form" action="/api/decay/all" method="post" data-toast="Decaying guild">
+                <input type="hidden" name="api-key" style="visibility: hidden" value="{{ api_key }}">
                 <button class="btn btn-danger" style="width: 100%;">Decay</button>
             </form>
         </div>
@@ -22,11 +22,11 @@
 {% endblock %}
 {% block content -%}
     <div class="col-lg-6">
-        <form action="/api/import" method="POST">
+        <form class="api-form" action="/api/import" method="POST" data-toast="Importing Data">
             <textarea name="json-data" id="import-text" cols="30" rows="10" placeholder="Paste Data Here"
                       class="form-control" spellcheck="false"></textarea>
             <button class="btn align-right">Submit</button>
-            <input type="text" name="api-key" value="{{ current_user.api_key }}" style="visibility: hidden;">
+            <input type="hidden" name="api-key" value="{{ current_user.api_key }}" style="visibility: hidden;">
         </form>
     </div>
 {% endblock %}
