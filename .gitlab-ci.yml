@@ -1,0 +1,3 @@
+image: python:3.4
+test:
+  - python adk-epgp.py --ci
