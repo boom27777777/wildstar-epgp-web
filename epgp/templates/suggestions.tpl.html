@@ -13,9 +13,8 @@
                     <td style="width: 99%"><p>{{ suggestion.body }}</p></td>
                     <td>
                         <form action="/api/suggest/delete" method="post">
-                            <input type="text" name="suggestion-id" id="suggestion-id" style="visibility: hidden"
-                                   value="{{ suggestion._id }}">
-                            <button class="btn btn-danger" style="height: ">Delete</button>
+                            <input type="hidden" name="suggestion-id" id="suggestion-id" value="{{ suggestion._id }}">
+                            <button class="btn btn-danger">Delete</button>
                         </form>
                     </td>
                 </tr>
