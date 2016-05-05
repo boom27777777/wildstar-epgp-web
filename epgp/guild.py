@@ -58,6 +58,7 @@ class Guild:
             d_gp = round(player.gp * percent, 0)
             if player.gp - d_gp < 2000:
                 d_gp = 2000 - player.gp
+
             player.raw_data['GP'] -= d_gp
             player.gp = player.raw_data['GP']
             player.raw_data['logs'].insert(
@@ -72,6 +73,9 @@ class Guild:
                 })
 
             d_ep = round(player.ep * percent, 0)
+            if player.ep - d_ep < 750:
+                d_ep = 750 - player.e
+
             player.raw_data['EP'] -= d_ep
             player.ep = player.raw_data['EP']
             player.raw_data['logs'].insert(
