@@ -74,7 +74,7 @@ class Guild:
 
             d_ep = round(player.ep * percent, 0)
             if player.ep - d_ep < 750:
-                d_ep = 750 - player.e
+                d_ep = 750 - player.ep
 
             player.raw_data['EP'] -= d_ep
             player.ep = player.raw_data['EP']
